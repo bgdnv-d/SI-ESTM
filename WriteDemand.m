@@ -119,11 +119,8 @@ switch setup.ModelType
         end
 end
 
-if setup.New
+WriteParams(fileName,'annualDemand',round(shiftdim(round(systemParams.Instalations(:,find(systemParams.IndexYears==costYear),find(ismember(systemParams.IndexID,activeElements.labels.load)))),2)'*m_factor,6),[1:length(systemParams.IndexNodes)],activeElements.labels.load);
 
-    WriteParams(fileName,'annualDemand',round(shiftdim(round(systemParams.Instalations(:,find(systemParams.IndexYears==costYear),find(ismember(systemParams.IndexID,activeElements.labels.load)))),2)'*m_factor,6),[1:length(systemParams.IndexNodes)],activeElements.labels.load);
-
-end
 if ~setup.ProsumersRun
     %% for Macro simulations
     if setup.MacroReg

@@ -90,79 +90,7 @@ else
 end
 
 
-
-
-if setup.Macro
-
-    systemData0=systemData;
-    setup0=setup;    
-    
-    if setup.MacroMc
-        [systemData,setup] = PrepareMacroScenario(systemData0,setup0);
-
-            %systemParams = systemData.systemParams;
-            switch setup.projType
-                case 'Regions'
-                    setup.Countries = [[1:length(systemData.systemParams.IndexNodes)]',[1:length(systemData.systemParams.IndexNodes)]'];
-
-
-                            PrepareCountriesScenario(systemData,setup);
-
-                case 'Countries'
-                    try setup.Countries;
-                    catch
-                        error('%s scenario countries list is not presented, please provide list of countries in ''setup.Countries''',setup.projType)
-                    end
-
-
-
-                            PrepareCountriesScenario(systemData,setup);
-
-                otherwise
-                    PrepareScenarioForTransition(systemData,setup);
-            end
-    end
-    
-    if setup.MacroReg
-        
-        systemData.systemParams = PrepareMacroRegAddDem(setup,systemData.systemParams)
-        
-            switch setup.MacroRegType
-                case 'Regions'
-                    setup.Countries = [[1:length(systemData.systemParams.IndexNodes)]',[1:length(systemData.systemParams.IndexNodes)]'];
-                    try 
-                        setup.CountriesType=setup.RegionsType;
-                        if strcmp(setup.CountriesType,'byRegions')
-                            setup.CountriesType = 'byCountries';
-                        end
-                    catch
-                        error('%s scenario type is not presented, please provide scenario type in the ''setup.RegionsType'' \nUse ''byYears'' for whole region simulation year by year, \nUse ''byRegions'' to simulate countries in parrallel ',setup.projType)
-                    end
-                    switch setup.CountriesType
-                        case 'byYears'
-                            PrepareScenario_ForTransition(systemData,setup);
-                        case 'byCountries'
-                            PrepareCountriesScenario(systemData,setup);
-                    end
-                case 'Countries'
-                    setup.Countries = systemData.systemParams.CountriesMc_R;
-                    try setup.Countries;
-                    catch
-                        error('%s scenario countries list is not presented, please provide list of countries in ''setup.Countries''',setup.projType)
-                    end
-
-
-
-                            PrepareCountriesScenario(systemData,setup);
-
-                otherwise
-                    PrepareScenarioForTransition(systemData,setup);
-            end
-        
-    end
-    
-else
-
+%% run centralised system
 %systemParams = systemData.systemParams;
 switch setup.projType
     case 'Regions'
@@ -184,7 +112,6 @@ end
 end
 
 
-end
 
 
 

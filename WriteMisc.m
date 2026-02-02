@@ -121,71 +121,68 @@ WriteParams(fileName,'LH2_El_cons',round(struct.EffLH2_El(:,struct.IndexYears==c
 
 
 
-if setup.New
+WriteParams(fileName,'MeO_CO2_cons',round(struct.EffMeO_CO(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'MeO_El_cons',round(struct.EffMeO_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'MeO_He_prod',round(struct.EffMeO_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'MeO_CO2_cons',round(struct.EffMeO_CO(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'MeO_El_cons',round(struct.EffMeO_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'MeO_He_prod',round(struct.EffMeO_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'DME_CO2_cons',round(struct.EffDME_CO(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'DME_El_cons',round(struct.EffDME_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'DME_He_prod',round(struct.EffDME_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'DME_CO2_cons',round(struct.EffDME_CO(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'DME_El_cons',round(struct.EffDME_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'DME_He_prod',round(struct.EffDME_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'NH3_El_cons',round(struct.EffNH3_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'NH3_He_prod',round(struct.EffNH3_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'NH3_El_cons',round(struct.EffNH3_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'NH3_He_prod',round(struct.EffNH3_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'HyS_El_cons',round(struct.EffHyS_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'HyS_El_cons',round(struct.EffHyS_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'SNG_El_cons',round(struct.EffMET_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'SNG_He_prod',round(struct.EffMET_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'SNG_El_cons',round(struct.EffMET_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'SNG_He_prod',round(struct.EffMET_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'WEL_He_prod',round(struct.EffWEL_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'WEL_He_prod',round(struct.EffWEL_He_out(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ICB_Lime_cons',round(struct.EffICB_Lime(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ICB_El_cons',round(struct.EffICB_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ICB_He_cons',round(struct.EffICB_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'ICB_Lime_cons',round(struct.EffICB_Lime(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ICB_El_cons',round(struct.EffICB_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ICB_He_cons',round(struct.EffICB_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ICI_Lime_cons',round(struct.EffICI_Lime(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ICI_El_cons',round(struct.EffICI_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ICI_He_cons',round(struct.EffICI_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'ICI_Lime_cons',round(struct.EffICI_Lime(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ICI_El_cons',round(struct.EffICI_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ICI_He_cons',round(struct.EffICI_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISB_Ore_cons',round(struct.EffISB_Ore(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISB_El_cons',round(struct.EffISB_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISB_He_cons',round(struct.EffISB_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISB_HC_cons',round(struct.EffISB_HC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'ISB_Ore_cons',round(struct.EffISB_Ore(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISB_El_cons',round(struct.EffISB_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISB_He_cons',round(struct.EffISB_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISB_HC_cons',round(struct.EffISB_HC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISH_Ore_cons',round(struct.EffISH_Ore(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISH_El_cons',round(struct.EffISH_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISH_He_cons',round(struct.EffISH_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISH_Hy_cons',round(struct.EffISH_Hy(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISH_CC_cons',round(struct.EffISH_CC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'ISH_Ore_cons',round(struct.EffISH_Ore(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISH_El_cons',round(struct.EffISH_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISH_He_cons',round(struct.EffISH_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISH_Hy_cons',round(struct.EffISH_Hy(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISH_CC_cons',round(struct.EffISH_CC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISR_Scrap_cons',round(struct.EffISR_Scr(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISR_El_cons',round(struct.EffISR_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISR_He_cons',round(struct.EffISR_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISR_CC_cons',round(struct.EffISR_CC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'ISR_Scrap_cons',round(struct.EffISR_Scr(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISR_El_cons',round(struct.EffISR_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISR_He_cons',round(struct.EffISR_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISR_CC_cons',round(struct.EffISR_CC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISE_Ore_cons',round(struct.EffISE_Ore(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISE_El_cons',round(struct.EffISE_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISE_He_cons',round(struct.EffISE_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'ISE_CC_cons',round(struct.EffISE_CC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'ISE_Ore_cons',round(struct.EffISE_Ore(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISE_El_cons',round(struct.EffISE_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISE_He_cons',round(struct.EffISE_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'ISE_CC_cons',round(struct.EffISE_CC(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAA_Ba_cons',round(struct.EffIAA_Ba(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAA_So_cons',round(struct.EffIAA_So(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAA_He_cons',round(struct.EffIAA_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAA_He_prod',round(struct.EffIAA_HeOut(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAM_Aa_cons',round(struct.EffIAM_Aa(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAM_El_cons',round(struct.EffIAM_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAM_He_prod',round(struct.EffIAM_HeOut(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAR_Al_cons',round(struct.EffIAR_Al(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAR_El_cons',round(struct.EffIAR_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IAR_He_cons',round(struct.EffIAR_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'IAA_Ba_cons',round(struct.EffIAA_Ba(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAA_So_cons',round(struct.EffIAA_So(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAA_He_cons',round(struct.EffIAA_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAA_He_prod',round(struct.EffIAA_HeOut(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAM_Aa_cons',round(struct.EffIAM_Aa(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAM_El_cons',round(struct.EffIAM_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAM_He_prod',round(struct.EffIAM_HeOut(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAR_Al_cons',round(struct.EffIAR_Al(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAR_El_cons',round(struct.EffIAR_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IAR_He_cons',round(struct.EffIAR_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IPP_Wo_cons',round(struct.EffIPP_Wo(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IPP_El_cons',round(struct.EffIPP_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
+WriteParams(fileName,'IPP_He_cons',round(struct.EffIPP_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
 
-    WriteParams(fileName,'IPP_Wo_cons',round(struct.EffIPP_Wo(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IPP_El_cons',round(struct.EffIPP_El(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-    WriteParams(fileName,'IPP_He_cons',round(struct.EffIPP_He(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');
-
-end
 %CCS
 
 WriteParams(fileName,'shareOfSNG',round(struct.shareOfSNG(:,struct.IndexYears==costYear),4),[1:length(struct.IndexNodes)]');

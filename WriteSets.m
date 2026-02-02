@@ -61,10 +61,7 @@ SingleSet(fileName,'bevTypes',{'MRLB';'MRWB';'MRBB';'MRMB';'MRHB'})
 SingleSet(fileName,'fceTypes',{'MRLF';'MRWF';'MRBF';'MRMF';'MRHF'})
 SingleSet(fileName,'pheTypes',{'MRLP';'MRWP';'MRBP';'MRMP';'MRHP'})
 
-
-if setup.New
-    SingleSet(fileName,'Load',activeElements.labels.load)
-end
+SingleSet(fileName,'Load',activeElements.labels.load)
 
 SingleSet(fileName,'Fuel',struct.IndexFuels)
 

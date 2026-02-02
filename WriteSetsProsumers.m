@@ -61,9 +61,7 @@ if setup.Mobility
     SingleSet(fileName,'pheTypes',{'MRLP';'MRWP';'MRBP';'MRMP';'MRHP'})
 end
 
-if setup.New
-    SingleSet(fileName,'Load',activeElements.labels.load)
-end
+SingleSet(fileName,'Load',activeElements.labels.load)
 
 SingleSet(fileName,'Fuel',struct.IndexFuels)
 
