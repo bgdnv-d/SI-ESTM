@@ -23,14 +23,6 @@ end
 
 projName = [setup.projType];
 
-if setup.MacroMc
-    projName = [projName '_Mc'];
-end
-
-if setup.MacroReg
-    projName = [projName '_R'];
-end
-
 if setup.OvernightFlag
     projName = [projName '_Overnight'];
 end

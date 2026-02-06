@@ -210,10 +210,10 @@ WriteParams(fileName,'V2GShare_MDV',setup.V2GShare_MDV(:,struct.IndexYears==cost
 
 WriteParams(fileName,'DumpChargeShare_HDV',setup.DumpChargeShare_HDV(:,struct.IndexYears==costYear),[1:length(struct.IndexNodes)]');
 WriteParams(fileName,'V2GShare_HDV',setup.V2GShare_HDV(:,struct.IndexYears==costYear),[1:length(struct.IndexNodes)]');
-
-WriteParams(fileName,'ProsumersPV_EL',round(sum(struct.SCData.RPVO_EL,1)*m_factor,3)',[1:length(struct.IndexNodes)]');
-WriteParams(fileName,'ProsumersPV_cap',round(sum(struct.SCData.OPT_SIZE_RPVO,1)*m_factor,3)',[1:length(struct.IndexNodes)]');
-
+if setup.SC.Flag
+    WriteParams(fileName,'ProsumersPV_EL',round(sum(struct.SCData.RPVO_EL,1)*m_factor,3)',[1:length(struct.IndexNodes)]');
+    WriteParams(fileName,'ProsumersPV_cap',round(sum(struct.SCData.OPT_SIZE_RPVO,1)*m_factor,3)',[1:length(struct.IndexNodes)]');
+end
 try setup.fixTech.Flag;
 catch
     setup.fixTech.Flag = 0;

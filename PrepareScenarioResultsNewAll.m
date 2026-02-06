@@ -902,9 +902,9 @@ Share = (z * shareExport + (1-z) * shareImport)';
 
 for rr = Regs
     try
-        qq = load([setup.rootDir filesep 'projects\Base\input-data' filesep baseData.systemParams.ValueLoadTag{1,rr} '_' num2str(costYear) '.mat']);
+        qq = load([setup.rootDir filesep 'projects' filesep 'Base' filesep 'input-data' filesep baseData.systemParams.ValueLoadTag{1,rr} '_' num2str(costYear) '.mat']);
     catch
-        qq = load([setup.rootDir filesep 'projects\Base\input-data' filesep baseData.systemParams.ValueLoadTag{1,rr} '.mat']);
+        qq = load([setup.rootDir filesep 'projects' filesep 'Base' filesep 'input-data' filesep baseData.systemParams.ValueLoadTag{1,rr} '.mat']);
     end
     profileName = (fieldnames(qq));
     baseData.systemParams.ValueLoad(1,:,1,rr) = qq.(profileName{1});

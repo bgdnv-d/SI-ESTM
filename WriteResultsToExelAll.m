@@ -34,14 +34,6 @@ scriptVersion = 5.2;
 
 pName = [projType];
 
-if setup.MacroMc
-    pName = [pName '_Mc'];
-end
-
-if setup.MacroReg
-    pName = [pName '_R'];
-end
-
 if setup.OvernightFlag
     pName = [pName '_Overnight'];
 end
@@ -1655,31 +1647,31 @@ catch
     WindCF = 0.95;
 end
 
-try [num,txt,raw]=xlsread(exelFile,'Version');
-    if num(1,1) == scriptVersion
+try raw=readcell(exelFile,'Sheet','Version');
+    if raw{1,2} == scriptVersion
         try
-            [num,txt,raw]=xlsread(exelFile,'Summary');
+            raw=readcell(exelFile,'Sheet','Summary');
 
             fullData = [raw,[name; (data(end,:)')]];
-            xlswrite(exelFile,fullData,'Summary')
+            writecell(fullData,exelFile,'Sheet','Summary')
         catch
 
             fullData = [[{' ', ' ' } name];[data(1:2,:)' data(end,:)']]; %[tableNamesUnits,[name;  num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
-            xlswrite(exelFile,fullData,'Summary')
+            writecell(fullData,exelFile,'Sheet','Summary')
         end
     else
-        xlswrite(exelFile,[['Version:' num2cell(scriptVersion)];['Wind CF' num2cell(WindCF)]],'Version')
+        writecell([['Version:' num2cell(scriptVersion)];['Wind CF' num2cell(WindCF)]],exelFile,'Sheet','Version')
         fullData = [[{' ', ' ' } name];[data(1:2,:)' data(end,:)']]; %fullData = [tableNamesUnits,[name; {' '}; num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
-        xlswrite(exelFile,fullData,'Summary')
+        writecell(fullData,exelFile,'Sheet','Summary')
 
     end
 catch
-    xlswrite(exelFile,[['Version:' num2cell(scriptVersion)];['Wind CF' num2cell(WindCF)]],'Version')
+    writecell([['Version:' num2cell(scriptVersion)];['Wind CF' num2cell(WindCF)]],exelFile,'Sheet','Version')
     fullData = [[{' ', ' ' } name];[data(1:2,:)' data(end,:)']]; %fullData = [tableNamesUnits,[name; {' '}; num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
-    xlswrite(exelFile,fullData,'Summary')
+    writecell(fullData,exelFile,'Sheet','Summary')
 end
 
 fullData = [[{' ', ' '},systemParams.IndexNodes',{'Total'}]; data'];
 
 
-xlswrite(exelFile,fullData,name)
+writecell(fullData,exelFile,'Sheet',name)
