@@ -33,12 +33,7 @@ for costYear = setup.startYear:setup.stepYear:setup.endYear
     systemParams.HP.COP_DH(:,:,systemParams.IndexYears==costYear) = 1./(repmat(setup.airHPshare_DH(:,systemParams.IndexYears==costYear)',setup.endHour,1)./systemParams.HP.airHP_COP_DH+repmat(setup.waterHPshare_DH(:,systemParams.IndexYears==costYear)',setup.endHour,1)./systemParams.HP.waterHP_COP_DH+repmat(setup.groundHPshare_DH(:,systemParams.IndexYears==costYear)',setup.endHour,1)./systemParams.HP.groundHP_COP_DH)*systemParams.Efficiency(ismember(systemParams.IndexID,'TDHP'),systemParams.IndexYears==costYear);
 
     systemParams.HP.COP_IH_mean(:,:,systemParams.IndexYears==costYear) = repmat(mean(systemParams.HP.COP_IH(:,:,systemParams.IndexYears==costYear),1),8760,1);
-    systemParams.HP.COP_DH_mean(:,:,systemParams.IndexYears==costYear) = repmat(mean(systemParams.HP.COP_IH(:,:,systemParams.IndexYears==costYear),1),8760,1);
+    systemParams.HP.COP_DH_mean(:,:,systemParams.IndexYears==costYear) = repmat(mean(systemParams.HP.COP_DH(:,:,systemParams.IndexYears==costYear),1),8760,1);
 
 
 end
-
-
-
-
-qq = 1;

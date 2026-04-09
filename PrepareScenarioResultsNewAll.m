@@ -1,6 +1,6 @@
-function calc = PrepareScenarioResultsNewAll(setup,costYear,baseData,Reg1,Reg2,type,varargin)
+function calc = PrepareScenarioResultsNewAll(setup,costYear,baseData,Reg1,Regs,type,varargin)
 %
-% FUNCTION prepareScenarioResultsNewAll(setup, costYear, baseData, Reg1, Reg2, type, varargin)
+% FUNCTION prepareScenarioResultsNewAll(setup, costYear, baseData, Reg1, Regs, type, varargin)
 %
 % Prepares scenario result data for all regions and technologies.
 %
@@ -12,7 +12,7 @@ function calc = PrepareScenarioResultsNewAll(setup,costYear,baseData,Reg1,Reg2,t
 %            costYear:   Year to which all costs are adjusted.
 %            baseData:   Structure with base scenario data.
 %            Reg1:       Name or index of the first region.
-%            Reg2:       Name or index of the second region.
+%            Regs:       Regions considered.
 %            type:       ADD!!!!!!!!!!!!!!!!!!!!
 %            varargin:   ADD!!!!!!!!!!!!!!!!!!!!
 %
@@ -106,6 +106,10 @@ end
 
 if Only.Flag
     pName = [pName '_Only'];
+end
+
+if isfield(setup, 'Scenario') && isfield(setup.Scenario, 'Name')
+    pName = [pName '_' setup.Scenario.Name];
 end
 
 pName = [pName '_' num2str(costYear)];
@@ -513,135 +517,130 @@ results.RHAR_CO = results.RHAR_CO + results.RHAR_OTHER * systemParams.CoalEmissi
 
 %% load prosumers sector results
 if SCFlag
+    
     if setup.MacroMc
-        resultsSC = ReadProsResTransMacro(setup,systemParams,Reg1,Reg2,costYear);
+        resultsSC = ReadProsResTransMacro(setup,systemParams,Reg1,Regs(end),costYear);
     else
-        if setup.Big
-            resultsSC = ReadProsResTrans(setup,systemParams,Reg1,Reg2,costYear,name);
-        else
-            resultsSC = ReadProsResTrans(setup,systemParams,Reg1,Reg2,costYear);
-        end
+        resultsSC = ReadProsResTrans(setup,systemParams,Reg1,Regs,costYear);
     end
-
-
 
 else
 
-    resultsSC.OPT_SIZE_IBAC = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_IBAI = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_IBAR = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_IHHS = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_SHHS = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_SBAC = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_SBAI = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_SBAR = zeros(1,length(systemParams.IndexNodes));
+    resultsSC.OPT_SIZE_IBAC = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_IBAI = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_IBAR = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_IHHS = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_SHHS = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_SBAC = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_SBAI = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_SBAR = zeros(1,length(Regs));
 
-    resultsSC.OPT_SIZE_RPVC = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_RPVI = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_RPVR = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_RRSH = zeros(1,length(systemParams.IndexNodes));
+    resultsSC.OPT_SIZE_RPVC = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_RPVI = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_RPVR = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_RRSH = zeros(1,length(Regs));
 
-    resultsSC.OPT_SIZE_THBG = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_THBP = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_THHP = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_THHR = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_THNG = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.OPT_SIZE_THOI = zeros(1,length(systemParams.IndexNodes));
+    resultsSC.OPT_SIZE_THBG = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_THBP = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_THHP = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_THHR = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_THNG = zeros(1,length(Regs));
+    resultsSC.OPT_SIZE_THOI = zeros(1,length(Regs));
 
-    resultsSC.Cap_IBAC = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_IBAI = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_IBAR = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_IHHS = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_SHHS = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_SBAC = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_SBAI = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_SBAR = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
+    resultsSC.Cap_IBAC = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_IBAI = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_IBAR = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_IHHS = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_SHHS = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_SBAC = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_SBAI = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_SBAR = zeros(length(Regs),length(systemParams.IndexYears));
 
-    resultsSC.Cap_RPVC = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_RPVI = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_RPVR = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_RRSH = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
+    resultsSC.Cap_RPVC = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_RPVI = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_RPVR = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_RRSH = zeros(length(Regs),length(systemParams.IndexYears));
 
-    resultsSC.Cap_THBG = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_THBP = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_THHP = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_THHR = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_THNG = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
-    resultsSC.Cap_THOI = zeros(length(systemParams.IndexNodes),length(systemParams.IndexYears));
+    resultsSC.Cap_THBG = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_THBP = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_THHP = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_THHR = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_THNG = zeros(length(Regs),length(systemParams.IndexYears));
+    resultsSC.Cap_THOI = zeros(length(Regs),length(systemParams.IndexYears));
 
-    resultsSC.EL_EXCESS = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_GRID = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_SHHS = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_SBAC = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_SBAI = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_SBAR = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_THHP = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.EL_THHR = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.EL_EXCESS = zeros(8760,length(Regs));
+    resultsSC.EL_GRID = zeros(8760,length(Regs));
+    resultsSC.EL_SHHS = zeros(8760,length(Regs));
+    resultsSC.EL_SBAC = zeros(8760,length(Regs));
+    resultsSC.EL_SBAI = zeros(8760,length(Regs));
+    resultsSC.EL_SBAR = zeros(8760,length(Regs));
+    resultsSC.EL_THHP = zeros(8760,length(Regs));
+    resultsSC.EL_THHR = zeros(8760,length(Regs));
 
-    resultsSC.SHHS_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SBAC_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SBAI_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SBAR_EL = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.SHHS_EL = zeros(8760,length(Regs));
+    resultsSC.SBAC_EL = zeros(8760,length(Regs));
+    resultsSC.SBAI_EL = zeros(8760,length(Regs));
+    resultsSC.SBAR_EL = zeros(8760,length(Regs));
 
-    resultsSC.THBG_HE = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.THBP_HE = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.THHP_HE = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.THHR_HE = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.THNG_HE = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.THOI_HE = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.THBG_HE = zeros(8760,length(Regs));
+    resultsSC.THBP_HE = zeros(8760,length(Regs));
+    resultsSC.THHP_HE = zeros(8760,length(Regs));
+    resultsSC.THHR_HE = zeros(8760,length(Regs));
+    resultsSC.THNG_HE = zeros(8760,length(Regs));
+    resultsSC.THOI_HE = zeros(8760,length(Regs));
 
-    resultsSC.RBGA_FU = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RHAR_FU = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RNGA_FU = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RPET_FU = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RWOO_FU = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RWWO_FU = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RRSH_HE = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RPVC_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RPVI_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RPVR_EL = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.RBGA_FU = zeros(8760,length(Regs));
+    resultsSC.RHAR_FU = zeros(8760,length(Regs));
+    resultsSC.RNGA_FU = zeros(8760,length(Regs));
+    resultsSC.RPET_FU = zeros(8760,length(Regs));
+    resultsSC.RWOO_FU = zeros(8760,length(Regs));
+    resultsSC.RWWO_FU = zeros(8760,length(Regs));
+    resultsSC.RRSH_HE = zeros(8760,length(Regs));
+    resultsSC.RPVC_EL = zeros(8760,length(Regs));
+    resultsSC.RPVI_EL = zeros(8760,length(Regs));
+    resultsSC.RPVR_EL = zeros(8760,length(Regs));
 
-    resultsSC.HE_EXCESS_Local = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SoC_SHHS = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SoC_SBAC = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SoC_SBAI = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.SoC_SBAR = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.HE_EXCESS_Local = zeros(8760,length(Regs));
+    resultsSC.SoC_SHHS = zeros(8760,length(Regs));
+    resultsSC.SoC_SBAC = zeros(8760,length(Regs));
+    resultsSC.SoC_SBAI = zeros(8760,length(Regs));
+    resultsSC.SoC_SBAR = zeros(8760,length(Regs));
 
-    resultsSC.RES.DemP = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RES.Dem = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.RES.EL_EXCESS = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RES.EL_GRID = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RES.EL_SBAT = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RES.OPT_SIZE_IBAT = zeros(length(systemParams.IndexNodes));
-    resultsSC.RES.OPT_SIZE_SBAT = zeros(length(systemParams.IndexNodes));
-    resultsSC.RES.OPT_SIZE_RPVO = zeros(length(systemParams.IndexNodes));
-    resultsSC.RES.RPVO_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RES.SBAT_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.RES.SC_demand = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.RES.DemP = zeros(8760,length(Regs));
+    resultsSC.RES.Dem = zeros(1,length(Regs));
+    resultsSC.RES.EL_EXCESS = zeros(8760,length(Regs));
+    resultsSC.RES.EL_GRID = zeros(8760,length(Regs));
+    resultsSC.RES.EL_SBAT = zeros(8760,length(Regs));
+    resultsSC.RES.OPT_SIZE_IBAT = zeros(length(Regs));
+    resultsSC.RES.OPT_SIZE_SBAT = zeros(length(Regs));
+    resultsSC.RES.OPT_SIZE_RPVO = zeros(length(Regs));
+    resultsSC.RES.RPVO_EL = zeros(8760,length(Regs));
+    resultsSC.RES.SBAT_EL = zeros(8760,length(Regs));
+    resultsSC.RES.SC_demand = zeros(8760,length(Regs));
 
-    resultsSC.COM.DemP = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.COM.Dem = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.COM.EL_EXCESS = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.COM.EL_GRID = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.COM.EL_SBAT = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.COM.OPT_SIZE_IBAT = zeros(length(systemParams.IndexNodes));
-    resultsSC.COM.OPT_SIZE_SBAT = zeros(length(systemParams.IndexNodes));
-    resultsSC.COM.OPT_SIZE_RPVO = zeros(length(systemParams.IndexNodes));
-    resultsSC.COM.RPVO_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.COM.SBAT_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.COM.SC_demand = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.COM.DemP = zeros(8760,length(Regs));
+    resultsSC.COM.Dem = zeros(1,length(Regs));
+    resultsSC.COM.EL_EXCESS = zeros(8760,length(Regs));
+    resultsSC.COM.EL_GRID = zeros(8760,length(Regs));
+    resultsSC.COM.EL_SBAT = zeros(8760,length(Regs));
+    resultsSC.COM.OPT_SIZE_IBAT = zeros(length(Regs));
+    resultsSC.COM.OPT_SIZE_SBAT = zeros(length(Regs));
+    resultsSC.COM.OPT_SIZE_RPVO = zeros(length(Regs));
+    resultsSC.COM.RPVO_EL = zeros(8760,length(Regs));
+    resultsSC.COM.SBAT_EL = zeros(8760,length(Regs));
+    resultsSC.COM.SC_demand = zeros(8760,length(Regs));
 
-    resultsSC.IND.DemP = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.IND.Dem = zeros(1,length(systemParams.IndexNodes));
-    resultsSC.IND.EL_EXCESS = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.IND.EL_GRID = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.IND.EL_SBAT = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.IND.OPT_SIZE_IBAT = zeros(length(systemParams.IndexNodes));
-    resultsSC.IND.OPT_SIZE_SBAT = zeros(length(systemParams.IndexNodes));
-    resultsSC.IND.OPT_SIZE_RPVO = zeros(length(systemParams.IndexNodes));
-    resultsSC.IND.RPVO_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.IND.SBAT_EL = zeros(8760,length(systemParams.IndexNodes));
-    resultsSC.IND.SC_demand = zeros(8760,length(systemParams.IndexNodes));
+    resultsSC.IND.DemP = zeros(8760,length(Regs));
+    resultsSC.IND.Dem = zeros(1,length(Regs));
+    resultsSC.IND.EL_EXCESS = zeros(8760,length(Regs));
+    resultsSC.IND.EL_GRID = zeros(8760,length(Regs));
+    resultsSC.IND.EL_SBAT = zeros(8760,length(Regs));
+    resultsSC.IND.OPT_SIZE_IBAT = zeros(length(Regs));
+    resultsSC.IND.OPT_SIZE_SBAT = zeros(length(Regs));
+    resultsSC.IND.OPT_SIZE_RPVO = zeros(length(Regs));
+    resultsSC.IND.RPVO_EL = zeros(8760,length(Regs));
+    resultsSC.IND.SBAT_EL = zeros(8760,length(Regs));
+    resultsSC.IND.SC_demand = zeros(8760,length(Regs));
 
 end
 %% fix oil
@@ -2396,6 +2395,8 @@ totAnCost = (sum(opex_capex(:,:,ismember(allActiveExLoadLabels,'RPVO')).*capacit
     opex_capex(:,:,ismember(allActiveExLoadLabels,'TCOS')).*capacity(:,:,ismember(allActiveExLoadLabels,'TCOS'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TCOS')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TCOS')).*permute(repmat(sum(results.TCOS_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TCOS_GA,1)').*shareOfGasEl +...
     opex_capex(:,:,ismember(allActiveExLoadLabels,'TMET')).*capacity(:,:,ismember(allActiveExLoadLabels,'TMET'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TMET')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TMET')).*permute(repmat(sum(results.TMET_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TMET_GA,1)').*shareOfGasEl);
     opex_capex(:,:,ismember(allActiveExLoadLabels,'TFTU')).*capacity(:,:,ismember(allActiveExLoadLabels,'TFTU'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TFTU')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TFTU')).*permute(repmat(sum(results.TFTU_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TCOS_GA,1)').*shareOfGasEl +...
+    opex_capex(:,:,ismember(allActiveExLoadLabels,'TMeO')).*capacity(:,:,ismember(allActiveExLoadLabels,'TMeO'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TMeO')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TMeO')).*permute(repmat(sum(results.TMeO_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TMeO_GA,1)').*shareOfGasEl);
+    opex_capex(:,:,ismember(allActiveExLoadLabels,'TNH3')).*capacity(:,:,ismember(allActiveExLoadLabels,'TNH3'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TNH3')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TNH3')).*permute(repmat(sum(results.TNH3_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TCOS_GA,1)').*shareOfGasEl +...
     opex_capex(:,:,ismember(allActiveExLoadLabels,'TLNG')).*capacity(:,:,ismember(allActiveExLoadLabels,'TLNG'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TLNG')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TLNG')).*permute(repmat(sum(results.TLNG_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TMET_GA,1)').*shareOfGasEl);
     opex_capex(:,:,ismember(allActiveExLoadLabels,'TLH2')).*capacity(:,:,ismember(allActiveExLoadLabels,'TLH2'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TLH2')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TLH2')).*permute(repmat(sum(results.TLH2_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...
     opex_capex(:,:,ismember(allActiveExLoadLabels,'TSMR')).*capacity(:,:,ismember(allActiveExLoadLabels,'TSMR'))+opex_var(:,:,ismember(allActiveExLoadLabels,'TSMR')).*capSharesByYears(:,:,ismember(allActiveExLoadLabels,'TSMR')).*permute(repmat(sum(results.TSMR_GA,1)',1,1,length(systemParams.IndexYears)),[1 3 2]) +...sum(results.TMET_GA,1)').*shareOfGasEl);
@@ -2770,7 +2771,7 @@ GHG_tot_TTW_cost = systemParams.fossilCO2Cost(yearNumb)*GHG_tot_TTW;
 
 
 AmmoniaFromRE = systemParams.Instalations(:,:,ismember(systemParams.IndexID,'LINH'));
-AmmoniaFromFossil = setup.AmmoniaDemand(Regs,1:find(ismember(systemParams.IndexYears ,setup.endYear)))-AmmoniaFromRE;
+AmmoniaFromFossil = setup.AmmoniaDemand(Regs,1:find(ismember(systemParams.IndexYears ,setup.endYear)))-AmmoniaFromRE(:,1:find(ismember(systemParams.IndexYears ,setup.endYear)));
 
 FossilsToChemicals = systemParams.Instalations(:,yearNumb,ismember(systemParams.IndexID,'LICH'));
 

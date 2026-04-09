@@ -81,7 +81,7 @@ else
 end
 
 s= (dir(resFilename));
-if isfile(resFilename) & s.bytes>1000000
+if isfile(resFilename) && s.bytes>1000000
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%% Load data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,7 +110,7 @@ else
 
     if costYear==setup.startYear
 
-        if (setup.SupportFossilsFlag)&~(setup.OvernightFlag)
+        if (setup.SupportFossilsFlag)&&~(setup.OvernightFlag)
 
 
 
@@ -138,9 +138,9 @@ else
                 addString = [addString sprintf('s.t. TCOS_UpperLimitation2{n in N}: instCapacity_ptgTransf[n,''TCOS'']/10^3 = 0/10^3;\n')];
                 addString = [addString sprintf('s.t. TFTU_UpperLimitation2{n in N}: instCapacity_ptgTransf[n,''TFTU'']/10^3 = 0/10^3;\n')];
                 addString = [addString sprintf('s.t. TBGU_UpperLimitation2{n in N}: instCapacity_ptgTransf[n,''TBGU'']/10^3 = 0/10^3;\n')];
-                addString = [addString sprintf('s.t. FTCon0{t in T, n in N}: gen_ptgTransf[t,n,''TFTU''] = 0;\n')];
-                addString = [addString sprintf('s.t. FTCon1{t in T, n in N}: gen_ptgTransf[t,n,''TWEL''] = 0;\n')];
-                addString = [addString sprintf('s.t. FTCon3{t in T, n in N}: gen_ptgTransf[t,n,''TCOS''] = 0;\n')];
+                addString = [addString sprintf('s.t. FTConBlock0{t in T, n in N}: gen_ptgTransf[t,n,''TFTU''] = 0;\n')];
+                addString = [addString sprintf('s.t. FTConBlock1{t in T, n in N}: gen_ptgTransf[t,n,''TWEL''] = 0;\n')];
+                addString = [addString sprintf('s.t. FTConBlock3{t in T, n in N}: gen_ptgTransf[t,n,''TCOS''] = 0;\n')];
             end
 
             if setup.flexGT
@@ -201,7 +201,7 @@ else
 
     if setup.Heat.Flag
 
-        if (costYear~=2015)&(costYear <= 2040)
+        if (costYear~=2015)&&(costYear <= 2040)
             if ~setup.Mobility
                 try
                     setup.SolverPeakLoadLim;
@@ -386,7 +386,7 @@ else
         setup.ExcessLim = 0;
     end
 
-    if setup.ExcessLim;
+    if setup.ExcessLim
         addString = [addString sprintf('s.t. elelExcessLim{n in N}: 0.055 * sum{t in T} (demand_LELE[t,n] + TotalDesalinationElDemand[t,n] + powerToHeat[t,n] +electrolysis[t,n] + co2Scrubbing_El[t,n]+EltoLH2[t,n] + EltoLNG[t,n] + EltoMobility[t,n]+EltoInd[t,n]+ EltoMET[t,n]+ EltoMEO[t,n]+ EltoNH3[t,n] + EltoHyS[t,n])/10^6 >= sum{t in T} (excess_El[t,n])/10^6;\n')];
     end
 
@@ -470,8 +470,6 @@ else
     modelFile = ['GTM' name '.mod'];
     modelFileLP = strrep(modelFile,'.mod','.lp');
     modelFileSol = strrep(modelFile,'.mod','.sol');
-    modelFileBas = strrep(modelFile,'.mod','.bas');
-    modelFileMPS = strrep(modelFile,'.mod','.mps');
 
     % concatenation of data files string
     TMPdataFilesStr = fieldnames(datFiles);
@@ -649,11 +647,11 @@ else
             results.SolvParams = param;
             results.code = res.rcode;
             if ~setup.Mobility
-                results = results_WO_Mobility(results,length(results.OPT_SIZE_RWIN),endHour);
+                results = ResultsNoMobility(results,length(results.OPT_SIZE_RWIN),endHour);
             end
 
             if ~setup.IndustryFlag
-                results = results_WO_Industry(results,length(results.OPT_SIZE_RWIN),endHour);
+                results = ResultsNoIndustry(results,length(results.OPT_SIZE_RWIN),endHour);
             end
             disp('[done] result import.');
 
@@ -714,10 +712,10 @@ else
             results = PrepareResultsD(setup, varNames, solVec, objVal, activeElements,systemParams.IndexID,length(systemParams.IndexNumNodes),length(systemParams.gridMat),endHour);
 
             if ~setup.Mobility
-                results = results_WO_Mobility(results, length(results.OPT_SIZE_RWIN), endHour);
+                results = ResultsNoMobility(results, length(results.OPT_SIZE_RWIN), endHour);
             end
             if ~setup.IndustryFlag
-                results = results_WO_Industry(results, length(results.OPT_SIZE_RWIN), endHour);
+                results = ResultsNoIndustry(results, length(results.OPT_SIZE_RWIN), endHour);
             end
             
             disp('[done] result import.');
@@ -730,7 +728,7 @@ else
         model = gurobi_read([rootDir filesep 'projects' filesep pName filesep modelFileLP]);
 
         params.method = 2;
-        params.threads = 30;
+        params.threads = 10;
         params.ScaleFlag = 0;
         params.FeasibilityTol = setup.SolverFeasibilityTol;
         params.OptimalityTol = setup.SolverOptimalityTol;
@@ -740,15 +738,15 @@ else
         params.method = 2;
         params.threads = numThreads;
         params.ScaleFlag = 0;
-        params.BarConvTol = 1.e-5
+        params.BarConvTol = 1.e-5;
         params.FeasibilityTol = 1.e-4;
         params.OptimalityTol = 1.e-4;
-        params.ObjScale = -0.5
+        params.ObjScale = -0.5;
         params.Crossover = 0;
         params.BarHomogeneous = 1;
 
-        params.LogFile = [rootDir filesep 'projects' filesep pName filesep 'output' filesep 'log_' name 'gur.log']
-        res=gurobi(model,params)
+        params.LogFile = [rootDir filesep 'projects' filesep pName filesep 'output' filesep 'log_' name 'gur.log'];
+        res=gurobi(model,params);
         if strcmp(res.status,'OPTIMAL')
             resultsStat = 1; %Optimal
         elseif strcmp(res.status,'INF_OR_UNBD')
@@ -799,7 +797,8 @@ else
 
     if exist([rootDir filesep 'projects' filesep pName filesep modelFileLP])
         delete([rootDir filesep 'projects' filesep pName filesep modelFileLP])
-    else warning('No model file (.lp) found.')
+    else 
+        warning('No model file (.lp) found.')
     end
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

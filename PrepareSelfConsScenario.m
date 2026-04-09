@@ -345,18 +345,18 @@ for i=produsersTypesIndeces % all produsers types
         %% biomass
 
 
-        systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RBMW'),1) = systemParamsReg.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RBMW'),1)*setup.SC.Biomass_WastesShare;%.*setup.shareIndHeatPros;
+        systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RBMW'),1) = systemParamsReg.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RBMW'),1)*setup.SC.Biomass_WastesShare.*(setup.Heat.shareOfIndivHeatSectors(i)/sum(setup.Heat.shareOfIndivHeatSectors));
         systemParams.Opex_var_reg(ismember(systemParamsReg.IndexID,'RBMW'),1,year) = systemParamsReg.Opex_var_reg(ismember(systemParamsReg.IndexID,'RBMW'),1,year).*setup.SC.Biomass_WastesAddCost(year);
 
-        systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1) = systemParamsReg.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1)*setup.SC.Biomass_BiomassShare;%.*setup.shareIndHeatPros;
+        systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1) = systemParamsReg.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1)*setup.SC.Biomass_BiomassShare.*(setup.Heat.shareOfIndivHeatSectors(i)/sum(setup.Heat.shareOfIndivHeatSectors));
         systemParams.Opex_var_reg(ismember(systemParamsReg.IndexID,'RWOO'),1,year) = systemParamsReg.Opex_var_reg(ismember(systemParamsReg.IndexID,'RWOO'),1,year).*setup.SC.Biomass_BiomassAddCost(year);
         systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWWO'),1) = 0;
-        if costYear <=setup.startYear
-            systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1) = 5*10^10;%systemParamsReg.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1)*10;%.*setup.shareIndHeatPros;
-        end
+        % if costYear <=setup.startYear
+        %     systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1) = 5*10^10;%systemParamsReg.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RWOO'),1)*10.*setup.shareIndHeatPros;
+        % end
 
-        systemParams.ValueResource(find(ismember(systemParamsReg.IndexIDR,'RBGA')),:,1,1) = systemParamsReg.ValueResource(find(ismember(systemParamsReg.IndexIDR,'RBGA')),:,2,1)*setup.SC.Biomass_BiogasShare;%.*setup.shareIndHeatPros;
-        systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RBGA'),1)=sum(systemParamsReg.ValueResource(find(ismember(systemParamsReg.IndexIDR,'RBGA')),:,1,1))*setup.SC.Biomass_BiogasShare;%.*setup.shareIndHeatPros;
+        systemParams.ValueResource(find(ismember(systemParamsReg.IndexIDR,'RBGA')),:,1,1) = systemParamsReg.ValueResource(find(ismember(systemParamsReg.IndexIDR,'RBGA')),:,2,1)*setup.SC.Biomass_BiogasShare.*(setup.Heat.shareOfIndivHeatSectors(i)/sum(setup.Heat.shareOfIndivHeatSectors));
+        systemParams.ValueResourceTotal(ismember(systemParamsReg.IndexIDR,'RBGA'),1)=sum(systemParamsReg.ValueResource(find(ismember(systemParamsReg.IndexIDR,'RBGA')),:,1,1))*setup.SC.Biomass_BiogasShare.*(setup.Heat.shareOfIndivHeatSectors(i)/sum(setup.Heat.shareOfIndivHeatSectors));
         systemParams.Opex_var_reg(ismember(systemParamsReg.IndexID,'RBGA'),1,year) = systemParamsReg.Opex_var_reg(ismember(systemParamsReg.IndexID,'RBGA'),1,year).*setup.SC.Biomass_BiogasAddCost(year);
 
         systemParams.Opex_var_reg(ismember(systemParamsReg.IndexID,'RNGA'),1,year) = systemParamsReg.Opex_var_reg(ismember(systemParamsReg.IndexID,'RNGA'),1,year).*setup.SC.Biomass_GasAddCost(year);

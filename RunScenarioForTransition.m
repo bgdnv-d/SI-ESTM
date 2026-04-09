@@ -61,6 +61,10 @@ if setup.OnlyFlag
     projName = [projName '_Only'];
 end
 
+if isfield(setup, 'Scenario') && isfield(setup.Scenario, 'Name')
+    projName = [projName '_' setup.Scenario.Name];
+end
+
 projName = [projName '_' num2str(costYear)];
 
 if exist([setup.rootDir filesep 'projects' filesep projName],'dir') == 0

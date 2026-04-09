@@ -1,4 +1,4 @@
-function [instalations,active] = readProsInstalations(setup,systemParams,Reg1,Reg2, varargin)
+function [instalations,active] = readProsInstalations(setup,systemParams,Reg1,Regs, varargin)
 %
 % FUNCTION readProsInstalations(setup, systemParams, Reg1, Reg2, varargin)
 %
@@ -9,7 +9,7 @@ function [instalations,active] = readProsInstalations(setup,systemParams,Reg1,Re
 %            setup:         Structure that contains all necessary settings and data for processing.
 %            systemParams:  Structure with system parameters related to prosumers.
 %            Reg1:          Name or index of the first region.
-%            Reg2:          Name or index of the second region.
+%            Regs:          Regions for data collection.
 %            varargin:      ADD!!!!!!!!!!!!!!!!!!
 %
 % OUTPUT:
@@ -17,8 +17,7 @@ function [instalations,active] = readProsInstalations(setup,systemParams,Reg1,Re
 %            active:        ADD!!!!!!!!!!!!!!!!!!
 %
 %Dmitrii Bogdanov
-%last change 24.07.2025
-
+%last change 19.02.2026
 
 if nargin == 5
     name = varargin{1};
@@ -31,7 +30,7 @@ else
     name = '';
     nameAdd = ['']
 end
-instalations = zeros(Reg2-Reg1+1,size(systemParams.Instalations,2),size(systemParams.Instalations,3));
+instalations = zeros(size(Regs,2),size(systemParams.Instalations,2),size(systemParams.Instalations,3));
 
 if setup.OvernightFlag
     if setup.Heat.Flag
@@ -47,33 +46,34 @@ else
     end
 end
 
-for Reg = Reg1:Reg2
+for Reg = 1:size(Regs,2)
+    
     RegS = Reg-Reg1+1;
-    instRES = load([setup.rootDir filesep 'projects' filesep projName filesep 'output' filesep 'Instalations' '_RES_' num2str(Reg) nameAdd]);
-    instCOM = load([setup.rootDir filesep 'projects' filesep projName filesep 'output' filesep 'Instalations' '_COM_' num2str(Reg) nameAdd]);
-    instIND = load([setup.rootDir filesep 'projects' filesep projName filesep 'output' filesep 'Instalations' '_IND_' num2str(Reg) nameAdd]);
+    instRES = load([setup.rootDir filesep 'projects' filesep projName filesep 'output' filesep 'Instalations' '_RES_' num2str(Regs(Reg)) nameAdd]);
+    instCOM = load([setup.rootDir filesep 'projects' filesep projName filesep 'output' filesep 'Instalations' '_COM_' num2str(Regs(Reg)) nameAdd]);
+    instIND = load([setup.rootDir filesep 'projects' filesep projName filesep 'output' filesep 'Instalations' '_IND_' num2str(Regs(Reg)) nameAdd]);
 
     for ii = 1:length(systemParams.IndexID)
 
         if instRES.systemParams.Active(ii)==1 & ~sum(ismember({'RPVO','SBAT','IBAT'},systemParams.IndexID{ii}))
 
-            instalations(RegS,:,ii) = instalations(RegS,:,ii) + instRES.systemParams.Instalations(1,:,ii) + instCOM.systemParams.Instalations(1,:,ii) + instIND.systemParams.Instalations(1,:,ii);
+            instalations(Reg,:,ii) = instalations(Reg,:,ii) + instRES.systemParams.Instalations(1,:,ii) + instCOM.systemParams.Instalations(1,:,ii) + instIND.systemParams.Instalations(1,:,ii);
 
         end
     end
-
-    instalations(RegS,:,ismember(systemParams.IndexID,'RPVR')) = instRES.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'RPVR'));
-    instalations(RegS,:,ismember(systemParams.IndexID,'RPVC')) = instCOM.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'RPVC'));
-    instalations(RegS,:,ismember(systemParams.IndexID,'RPVI')) = instIND.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'RPVI'));
-
-    instalations(RegS,:,ismember(systemParams.IndexID,'SBAR')) = instRES.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'SBAR'));
-    instalations(RegS,:,ismember(systemParams.IndexID,'SBAC')) = instCOM.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'SBAC'));
-    instalations(RegS,:,ismember(systemParams.IndexID,'SBAI')) = instIND.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'SBAI'));
-
-    instalations(RegS,:,ismember(systemParams.IndexID,'IBAR')) = instRES.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'IBAR'));
-    instalations(RegS,:,ismember(systemParams.IndexID,'IBAC')) = instCOM.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'IBAC'));
-    instalations(RegS,:,ismember(systemParams.IndexID,'IBAI')) = instIND.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'IBAI'));
-
+    
+    instalations(Reg,:,ismember(systemParams.IndexID,'RPVR')) = instRES.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'RPVR'));
+    instalations(Reg,:,ismember(systemParams.IndexID,'RPVC')) = instCOM.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'RPVC'));
+    instalations(Reg,:,ismember(systemParams.IndexID,'RPVI')) = instIND.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'RPVI'));
+    
+    instalations(Reg,:,ismember(systemParams.IndexID,'SBAR')) = instRES.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'SBAR'));
+    instalations(Reg,:,ismember(systemParams.IndexID,'SBAC')) = instCOM.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'SBAC'));
+    instalations(Reg,:,ismember(systemParams.IndexID,'SBAI')) = instIND.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'SBAI'));
+    
+    instalations(Reg,:,ismember(systemParams.IndexID,'IBAR')) = instRES.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'IBAR'));
+    instalations(Reg,:,ismember(systemParams.IndexID,'IBAC')) = instCOM.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'IBAC'));
+    instalations(Reg,:,ismember(systemParams.IndexID,'IBAI')) = instIND.systemParams.Instalations(1,:,ismember(systemParams.IndexID,'IBAI'));
+        
 end
 
 active = instRES.systemParams.Active;

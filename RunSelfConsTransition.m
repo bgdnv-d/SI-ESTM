@@ -178,11 +178,15 @@ catch
 		disp('Platform not supported')
     end
 
-    if isempty(GLPKlog) || contains(GLPKlog(max(0,end-5):end),'error')
-	    display(GLPKlog(max(0,end-500):end));
+    if length(GLPKlog)<100
+        display(GLPKlog);
         error('Problem with compiling the model and writing to LP file')
+    else
+        if isempty(GLPKlog) || contains(GLPKlog(max(0,end-5):end),'error')
+	        display(GLPKlog(max(0,end-500):end));
+            error('Problem with compiling the model and writing to LP file')
+        end
     end
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%% Solve problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

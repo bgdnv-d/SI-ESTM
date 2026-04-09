@@ -99,8 +99,8 @@ for Reg = startReg:numReg
     costYear(Reg)=yearToRead(Reg);
     while costYear(Reg)<=setup.endYear
         try
-            calc = PrepareScenarioResultsNewAll(setup,costYear(Reg),baseData,Reg1,Reg2,'Temp')
-            PrepareScenarioResultsNewAll(setup,costYear(Reg),baseData,Reg1,Reg2,'Hist')
+            calc = PrepareScenarioResultsNewAll(setup,costYear(Reg),baseData,Reg1,setup.Regions,'Temp')
+            PrepareScenarioResultsNewAll(setup,costYear(Reg),baseData,Reg1,setup.Regions,'Hist')
 
             yearInd(Reg) = 1+(costYear(Reg)-setup.startYear)/setup.stepYear;
 

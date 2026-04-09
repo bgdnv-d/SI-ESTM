@@ -66,6 +66,10 @@ if setup.Only.Flag
     pName = [pName '_Only'];
 end
 
+if isfield(setup, 'Scenario') && isfield(setup.Scenario, 'Name')
+    pName = [pName '_' setup.Scenario.Name];
+end
+
 pName = [pName '_' num2str(costYear)];
 
 
@@ -1563,7 +1567,7 @@ data = [['Area'; '[1000km2]'; num2cell(single([systemParams.area'; sum(systemPar
     (sum(results.OPT_SIZE_SLD2+results.OPT_SIZE_SW22+results.OPT_SIZE_SBU2+results.OPT_SIZE_SMD2+results.OPT_SIZE_SHD2)'/10^6)] ))] ...
     ['V2G battery output'; '[TWh]';num2cell(single([sum(results.SLD2_EL+results.SW22_EL+results.SBU2_EL+results.SMD2_EL+results.SHD2_EL,1)'/10^9;...
     sum(sum(results.SLD2_EL+results.SW22_EL+results.SBU2_EL+results.SMD2_EL+results.SHD2_EL,1)'/10^9)] ))] ...
-    ['V2G battery cycles'; ' ';num2cell(single([sum(results.SLD2_EL+results.SW22_EL+results.SBU2_EL+results.SMD2_EL+results.SHD2_EL,1)'./(results.OPT_SIZE_SLD2+results.OPT_SIZE_SW22+results.OPT_SIZE_SBU2+results.OPT_SIZE_SMD2+results.OPT_SIZE_SHD2)';...
+    ['V2G battery cycles'; '[]';num2cell(single([sum(results.SLD2_EL+results.SW22_EL+results.SBU2_EL+results.SMD2_EL+results.SHD2_EL,1)'./(results.OPT_SIZE_SLD2+results.OPT_SIZE_SW22+results.OPT_SIZE_SBU2+results.OPT_SIZE_SMD2+results.OPT_SIZE_SHD2)';...
     sum(sum(results.SLD2_EL+results.SW22_EL+results.SBU2_EL+results.SMD2_EL+results.SHD2_EL,1)'/sum((results.OPT_SIZE_SLD2+results.OPT_SIZE_SW22+results.OPT_SIZE_SBU2+results.OPT_SIZE_SMD2+results.OPT_SIZE_SHD2)'))] ))] ...
     ['LDV battery capacity'; '[GWh]';num2cell(single([(results.OPT_SIZE_SLDV)'/10^6;(sum(results.OPT_SIZE_SLDV)'/10^6)] ))] ...
     ['V2G LDV battery capacity'; '[GWh]';num2cell(single([(results.OPT_SIZE_SLD2)'/10^6;(sum(results.OPT_SIZE_SLD2)'/10^6)] ))] ...
@@ -1656,22 +1660,22 @@ try raw=readcell(exelFile,'Sheet','Version');
             writecell(fullData,exelFile,'Sheet','Summary')
         catch
 
-            fullData = [[{' ', ' ' } name];[data(1:2,:)' data(end,:)']]; %[tableNamesUnits,[name;  num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
+            fullData = [[{'Parameter', 'Unit' } name];[data(1:2,:)' data(end,:)']]; %[tableNamesUnits,[name;  num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
             writecell(fullData,exelFile,'Sheet','Summary')
         end
     else
         writecell([['Version:' num2cell(scriptVersion)];['Wind CF' num2cell(WindCF)]],exelFile,'Sheet','Version')
-        fullData = [[{' ', ' ' } name];[data(1:2,:)' data(end,:)']]; %fullData = [tableNamesUnits,[name; {' '}; num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
+        fullData = [[{'Parameter', 'Unit' } name];[data(1:2,:)' data(end,:)']]; %fullData = [tableNamesUnits,[name; {' '}; num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
         writecell(fullData,exelFile,'Sheet','Summary')
 
     end
 catch
     writecell([['Version:' num2cell(scriptVersion)];['Wind CF' num2cell(WindCF)]],exelFile,'Sheet','Version')
-    fullData = [[{' ', ' ' } name];[data(1:2,:)' data(end,:)']]; %fullData = [tableNamesUnits,[name; {' '}; num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
+    fullData = [[{'Parameter', 'Unit' } name];[data(1:2,:)' data(end,:)']]; %fullData = [tableNamesUnits,[name; {' '}; num2cell(sum(Area)); num2cell(sum(Population/1000)); num2cell(data(regNumb+1,:)')]];
     writecell(fullData,exelFile,'Sheet','Summary')
 end
 
-fullData = [[{' ', ' '},systemParams.IndexNodes',{'Total'}]; data'];
+fullData = [[{'Parameter', 'Unit' },systemParams.IndexNodes',{'Total'}]; data'];
 
 
 writecell(fullData,exelFile,'Sheet',name)
